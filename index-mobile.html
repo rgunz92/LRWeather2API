@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Weather App Demo</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://rawgit.com/marvelapp/devices.css/master/assets/devices.min.css">
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+
+	<body>
+		<div class="marvel-device iphone8">
+			<div class="screen">
+				<img src="img/vik4.png" alt="Vik Weather App" id="logo">
+				<form method="get" class="form">
+					<fieldset>
+						<legend>Start typing your city name, the fields will auto populate.</legend>
+						<ul class="list-reset">
+							<li class="form-field">
+								<label for="city-search">City Name</label>
+								<input type="text" id="city-search" placeholder="e.g. Palo Alto, CA">
+							</li>
+							<li class="form-field">
+								<label for="latitude">Latitude</label>
+								<input type="text" id="latitude" placeholder="e.g. 37.441923" required>
+							</li>
+
+							<li class="form-field">
+								<label for="longitude">Longitude</label>
+								<input type="text" id="longitude" placeholder="e.g. -122.143056" required>
+							</li>
+						</ul>
+					</fieldset>
+					<button>Get Weather!</button>
+				</form>
+			</div>
+		</div>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+		<script src="js/index-mobile.js"></script>
+	</body>
+</html>
