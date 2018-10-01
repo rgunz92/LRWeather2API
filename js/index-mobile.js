@@ -1,6 +1,4 @@
-// =================================================
-// Stagger Fade-In
-// =================================================
+
 
 function staggerFade() {
 	setTimeout(function() {
@@ -10,58 +8,32 @@ function staggerFade() {
 	}, 30);
 }
 
-// =================================================
-// Weather Reporter
-// =================================================
-
 function weatherReport(latitude, longitude) {
-	// variables config for coordinates, url and api key
-	// latitude and longitude are accepted arguments and passed
-	// once a user has submitted the form.
+
 	var apiKey       = '45efa1613b4013201b5cc24a7fc166db',
 			url          = 'https://api.darksky.net/forecast/',
 			lati         = latitude,
 			longi        = longitude,
 			api_call     = url + apiKey + "/" + lati + "," + longi + "?extend=hourly&callback=?";
 
-	// Hold our days of the week for reference later.
 	var days = [
-		'Sunday',
-		'Monday',
-		'Tuesday',
-		'Wednesday',
-		'Thursday',
-		'Friday',
-		'Saturday'
+		'Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'
 	];
 
-	// Hold hourly values for each day of the week.
-	// This will store our 24 hour forecast results.
-	var sunday    = [],
-			monday    = [],
-			tuesday   = [],
-			wednesday = [],
-			thursday  = [],
-			friday    = [],
-			saturday  = [];
+	var sunday    = [],monday    = [],tuesday   = [],wednesday = [],thursday  = [],friday    = [],saturday  = [];
 
-	// Hourly report method to reference in our daily loop
 	function hourlyReport(day, selector) {
 		for(var i = 0, l = day.length; i < l; i++) {
 			$("." + selector + " " + "ul").append('<li>' + Math.round(day[i]) + '</li>');
 		}
 	}
 
-	// Call to the DarkSky API to retrieve JSON
 	$.getJSON(api_call, function(forecast) {
-
-		// Loop thru hourly forecasts
 		for(var j = 0, k = forecast.hourly.data.length; j < k; j++) {
 			var hourly_date    = new Date(forecast.hourly.data[j].time * 1000),
 					hourly_day     = days[hourly_date.getDay()],
 					hourly_temp    = forecast.hourly.data[j].temperature;
 
-			// push 24 hour forecast values to our empty days array
 			switch(hourly_day) {
 				case 'Sunday':
 					sunday.push(hourly_temp);
@@ -89,7 +61,6 @@ function weatherReport(latitude, longitude) {
 			}
 		}
 
-		// Loop thru daily forecasts
 		for(var i = 0, l = forecast.daily.data.length; i < l - 1; i++) {
 
 			var date     = new Date(forecast.daily.data[i].time * 1000),
@@ -101,7 +72,6 @@ function weatherReport(latitude, longitude) {
 					temp    = Math.round(forecast.hourly.data[i].temperature),
 					tempMax = Math.round(forecast.daily.data[i].temperatureMax);
 
-			// Append Markup for each Forecast of the 7 day week
 			$("#forecast").append(
 				    "<div><b>--------------------------------------------------------------------------------------------------------------------------------</b></div>"+
 					"<div><b>Day</b>: " + date.toLocaleDateString() + "</div>" +
@@ -112,7 +82,6 @@ function weatherReport(latitude, longitude) {
 					'<div class="hourly' + ' ' + day + '"><b>24hr Forecast</b><ul class="list-reset"></ul></div>'
 			);
 
-			// Daily forecast report for each day of the week
 			switch(day) {
 				case 'Sunday':
 					hourlyReport(sunday, days[0]);
@@ -137,26 +106,20 @@ function weatherReport(latitude, longitude) {
 					break;
 			}
 		}
-		staggerFade(); // fade-in forecast cards in a stagger-esque fashion
+		staggerFade();
 	});
 }
 
-// Get Weather Button Event
 $('button').on('click', function(e) {
 	var lat       = $('#latitude').val(),
 			long      = $('#longitude').val(),
 			city_name = $('#city-search').val()
 
-	// If the latitude and longitude inputs aren't empty
-	// then continue with the code. Otherwise report error to user.
 	if(lat && long !== '') {
 		e.preventDefault();
 
-		// Fade logo out when form is submitted
 		$('#logo').fadeOut(100);
 
-		// Fade the form out, submit the weather request,
-		// inject "new forecast" button, city name & forecast cards.
 		$('.form').fadeOut(100, function() {
 			weatherReport(lat, long);
 			$('.screen').append('<ul class="list-reset fadein-stagger" id="forecast"></ul>');
@@ -164,23 +127,15 @@ $('button').on('click', function(e) {
 	}
 });
 
-
-// =================================================
-// Report City & AutoFill Coords
-// =================================================
-
 function insertGoogleScript() {
 	var google_api = document.createElement('script'),
 			api_key    = 'AIzaSyBmGU1r-MaCf2pIllNVSa9cSjuULBt1pyA';
 
-	// Inject the script for Google's API and reference the initGoogleAPI
-	// function as a callback.
 	google_api.src = 'https://maps.googleapis.com/maps/api/js?key='+ api_key +'&callback=initGoogleAPI&libraries=places,geometry';
 	document.body.appendChild(google_api);
 }
 
 
-// SearchBox Method
 function initGoogleAPI() {
 	var autocomplete = new google.maps.places.SearchBox(document.querySelector("#city-search"));
 
